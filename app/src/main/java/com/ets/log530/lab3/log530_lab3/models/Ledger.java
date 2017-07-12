@@ -14,7 +14,7 @@ public class Ledger extends RealmObject{
     private Account account;
     private Category category;
 
-    private int rec;
+    private boolean rec;
     private Date tdate;
     private String payee;
     private String description;
