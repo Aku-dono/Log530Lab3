@@ -43,6 +43,15 @@
         android:layout_alignRight="@+id/categoriesBtn"
         android:layout_alignEnd="@+id/categoriesBtn" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Balance per Account"
+        android:id="@+id/balanceLbl"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/accountsBtn" />
+
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -50,7 +59,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_below="@+id/accountsBtn"
+        android:layout_below="@+id/balanceLbl"
         android:fillViewport="true">
 
         <ListView

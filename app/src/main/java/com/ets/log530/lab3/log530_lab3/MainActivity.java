@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.ets.log530.lab3.log530_lab3.models.Account;
+import com.ets.log530.lab3.log530_lab3.models.Ledger;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,13 +18,22 @@ public class MainActivity extends AppCompatActivity {
     private List<String> balances;
     private ArrayAdapter<String> balancesAdaptor;
 
+    private Realm realm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Realm.getDefaultInstance();
+        this.realm = Realm.getDefaultInstance();
         initializeBalanceTable();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        this.realm.close();
     }
 
     private void initializeBalanceTable()
@@ -30,23 +42,20 @@ public class MainActivity extends AppCompatActivity {
         this.balancesAdaptor = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, balances);
 
         ListView table = (ListView)findViewById(R.id.accountBalanceTable);
-        if(table != null)
-        {
-            table.setAdapter(this.balancesAdaptor);
+        table.setAdapter(this.balancesAdaptor);
 
-            updateAccountBalances();
-        }
+        updateAccountBalances();
     }
 
     private void updateAccountBalances()
     {
         this.balances.clear();
 
-        for(int i = 0; i < 10; i++) {
-            this.balances.add("Test #" + i);
+        List<Account> accounts = this.realm.where(Account.class).findAll();
+        for(Account account : accounts) {
+            String accountName = account.getName();
+            this.balances.add(accountName + ": $" + this.realm.where(Ledger.class).equalTo("account.name", accountName).sum("amount"));
         }
-        //DO QUERY HERE
-
         this.balancesAdaptor.notifyDataSetChanged();
     }
 }
