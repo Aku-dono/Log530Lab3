@@ -1,10 +1,14 @@
-package com.ets.log530.lab3.log530_lab3;
+package com.ets.log530.lab3.log530_lab3.activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
+import com.ets.log530.lab3.log530_lab3.R;
 import com.ets.log530.lab3.log530_lab3.models.Account;
 import com.ets.log530.lab3.log530_lab3.models.Ledger;
 
@@ -25,6 +29,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ((Button)findViewById(R.id.accountsBtn)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, AccountsActivity.class));
+            }
+        });
+
         this.realm = Realm.getDefaultInstance();
         initializeBalanceTable();
     }
@@ -34,6 +45,13 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
 
         this.realm.close();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        updateAccountBalances();
     }
 
     private void initializeBalanceTable()
