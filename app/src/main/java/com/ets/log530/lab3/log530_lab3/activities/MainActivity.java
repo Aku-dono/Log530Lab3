@@ -35,6 +35,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, AccountsActivity.class));
             }
         });
+        ((Button)findViewById(R.id.categoriesBtn)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, CategoryActivity.class));
+            }
+        });
 
         this.realm = Realm.getDefaultInstance();
         initializeBalanceTable();

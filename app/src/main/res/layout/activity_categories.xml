@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Name: "
+        android:id="@+id/categories_nameLbl"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="30dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/categories_nameTxt"
+        android:layout_toRightOf="@+id/categories_nameLbl"
+        android:layout_toEndOf="@+id/categories_nameLbl"
+        android:layout_marginBottom="0dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="false"
+        android:layout_marginRight="30dp"
+        android:layout_alignTop="@+id/categories_nameLbl" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Description: "
+        android:id="@+id/categories_descriptionLbl"
+        android:layout_alignBottom="@+id/categories_descriptionTxt"
+        android:layout_alignLeft="@+id/categories_nameLbl"
+        android:layout_alignStart="@+id/categories_nameLbl" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/categories_descriptionTxt"
+        android:layout_below="@+id/categories_nameTxt"
+        android:layout_toRightOf="@+id/categories_descriptionLbl"
+        android:layout_toEndOf="@+id/categories_descriptionLbl"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="30dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Budget: "
+        android:id="@+id/categories_budgetLbl"
+        android:layout_alignLeft="@+id/categories_descriptionLbl"
+        android:layout_alignStart="@id/categories_nameLbl"
+        android:layout_below="@+id/categories_descriptionLbl"
+        android:layout_marginTop="0dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/categories_budgetTxt"
+        android:layout_alignBottom="@+id/categories_budgetLbl"
+        android:layout_alignEnd="@+id/categories_currentLbl"
+        android:layout_toRightOf="@+id/categories_budgetLbl"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="30dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Category"
+        android:id="@+id/categories_addBtn"
+        android:layout_below="@+id/categories_descriptionTxt"
+        android:layout_marginTop="30dp"
+        android:layout_alignLeft="@+id/categories_descriptionLbl"
+        android:layout_alignStart="@+id/categories_descriptionLbl"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="30dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Categories"
+        android:id="@+id/categories_currentLbl"
+        android:layout_below="@+id/categories_addBtn"
+        android:layout_centerHorizontal="true" />
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView3"
+        android:layout_toEndOf="@+id/categories_nameTxt"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/categories_currentLbl"
+        android:fillViewport="true">
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/categories_categoriesList"
+            android:longClickable="true" />
+    </ScrollView>
+
+</RelativeLayout>

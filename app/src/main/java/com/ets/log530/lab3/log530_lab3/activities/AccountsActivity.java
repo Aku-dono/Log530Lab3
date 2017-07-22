@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.ets.log530.lab3.log530_lab3.R;
@@ -15,16 +16,18 @@ import com.ets.log530.lab3.log530_lab3.models.Account;
 import com.ets.log530.lab3.log530_lab3.models.Ledger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.realm.Realm;
 import io.realm.exceptions.RealmPrimaryKeyConstraintException;
 
 public class AccountsActivity extends AppCompatActivity {
 
-    private List<String> accounts;
+    private List<Map<String, String>> accounts;
     private List<Account> rawAccounts;
-    private ArrayAdapter<String> accountsAdaptor;
+    private SimpleAdapter accountsAdaptor;
 
     private Realm realm;
 
@@ -63,7 +66,8 @@ public class AccountsActivity extends AppCompatActivity {
     {
         this.accounts = new ArrayList<>();
         this.rawAccounts = new ArrayList<>();
-        this.accountsAdaptor = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, accounts);
+        this.accountsAdaptor = new SimpleAdapter(this, this.accounts, android.R.layout.simple_list_item_2,
+                                                new String[] {"item", "subitem"}, new int[]{android.R.id.text1, android.R.id.text2});
 
         ListView table = (ListView)findViewById(R.id.accounts_accountsList);
         table.setLongClickable(true);
@@ -86,7 +90,11 @@ public class AccountsActivity extends AppCompatActivity {
 
         List<Account> accounts = this.realm.where(Account.class).findAll();
         for(Account account : accounts) {
-            this.accounts.add(account.getName() + " - " + account.getDescription());
+            Map<String, String> listElement = new HashMap<>();
+            listElement.put("item", account.getName());
+            listElement.put("subitem", account.getDescription());
+
+            this.accounts.add(listElement);
             this.rawAccounts.add(account);
         }
 
@@ -111,7 +119,7 @@ public class AccountsActivity extends AppCompatActivity {
             this.realm.cancelTransaction();
         }
 
-        Toast.makeText(getApplicationContext(), "Category '" + name + "' added!",
+        Toast.makeText(getApplicationContext(), "Account '" + name + "' added!",
                 Toast.LENGTH_LONG).show();
 
         updateAccounts();
@@ -137,7 +145,7 @@ public class AccountsActivity extends AppCompatActivity {
             this.realm.cancelTransaction();
         }
 
-        Toast.makeText(getApplicationContext(), "Category '" + accountName + "' deleted!",
+        Toast.makeText(getApplicationContext(), "Account '" + accountName + "' deleted!",
                 Toast.LENGTH_LONG).show();
 
         updateAccounts();
