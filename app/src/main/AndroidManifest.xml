@@ -3,11 +3,11 @@
     package="com.ets.log530.lab3.log530_lab3">
 
     <application
+        android:name=".FinanceJApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:name=".FinanceJApplication"
         android:theme="@style/AppTheme">
         <activity android:name=".activities.MainActivity">
             <intent-filter>
@@ -16,8 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.AccountsActivity"></activity>
-        <activity android:name=".activities.CategoryActivity"></activity>
+        <activity android:name=".activities.AccountsActivity" />
+        <activity android:name=".activities.CategoryActivity" />
+        <activity android:name=".activities.LedgerActivity"></activity>
     </application>
 
 </manifest>
