@@ -20,10 +20,13 @@ import com.ets.log530.lab3.log530_lab3.models.Category;
 import com.ets.log530.lab3.log530_lab3.models.Ledger;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 import io.realm.Realm;
 import io.realm.exceptions.RealmPrimaryKeyConstraintException;
@@ -127,7 +130,7 @@ public class LedgerActivity extends AppCompatActivity {
         this.transactions = new ArrayList<>();
         this.rawTransactions = new ArrayList<>();
         this.transactionsAdaptor = new SimpleAdapter(this, this.transactions, android.R.layout.simple_list_item_2,
-                new String[] {"date-description", "payee", "category", "amount", "rec"}, new int[]{android.R.id.text1, android.R.id.text2, android.R.id.text2, android.R.id.text2, android.R.id.text2});
+                new String[] {"item", "subitem"}, new int[]{android.R.id.text1, android.R.id.text2});
 
         ListView table = (ListView)findViewById(R.id.ledger_transactionsList);
         table.setLongClickable(true);
@@ -172,17 +175,17 @@ public class LedgerActivity extends AppCompatActivity {
         if(account != null)
         {
             String accountName = account.toString();
-
-            Log.i("TEST", "Account name is" + accountName);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
             List<Ledger> transactions = this.realm.where(Ledger.class).equalTo("account.name", accountName).findAll();
             for(Ledger ledger : transactions) {
                 Map<String, String> listElement = new HashMap<>();
-                listElement.put("date-description", ledger.getTdate().toString() + " - " + ledger.getDescription());
-                listElement.put("payee", ledger.getPayee());
-                listElement.put("category", ledger.getCategory().getName());
-                listElement.put("amount", "" + ledger.getAmount());
-                listElement.put("rec", ledger.isRec() ? "REC" : "" );
+
+                String itemStr = dateFormat.format(ledger.getTdate()) + " - " + ledger.getDescription() + ": $" + ledger.getAmount();
+                String subItemStr = ledger.getCategory().getName() + " - " + ledger.getPayee() + (ledger.isRec() ? " (REC)" : "");
+
+                listElement.put("item", itemStr);
+                listElement.put("subitem", subItemStr);
 
                 this.transactions.add(listElement);
                 this.rawTransactions.add(ledger);
@@ -194,11 +197,12 @@ public class LedgerActivity extends AppCompatActivity {
 
     private void addTransaction()
     {
+        String id = UUID.randomUUID().toString();
         String payee = ((EditText)findViewById(R.id.ledger_payeeTxt)).getText().toString();
         String description = ((EditText) findViewById(R.id.ledger_descriptionTxt)).getText().toString();
         float amount = Float.parseFloat(((EditText) findViewById(R.id.ledger_amountTxt)).getText().toString());
         Date date = Date.valueOf(((EditText) findViewById(R.id.ledger_dateTxt)).getText().toString());
-        boolean rec = ((Switch) findViewById(R.id.ledger_rec)).isActivated();
+        boolean rec = ((Switch) findViewById(R.id.ledger_rec)).isChecked();
 
         String accountName = ((Spinner)findViewById(R.id.ledger_accountDropdown)).getSelectedItem().toString();
         Account account = this.realm.where(Account.class).equalTo("name", accountName).findFirst();
@@ -207,6 +211,7 @@ public class LedgerActivity extends AppCompatActivity {
         Category category = this.realm.where(Category.class).equalTo("name", categoryName).findFirst();
 
         Ledger transaction = new Ledger();
+        transaction.setId(id);
         transaction.setAmount(amount);
         transaction.setPayee(payee);
         transaction.setDescription(description);
@@ -220,12 +225,15 @@ public class LedgerActivity extends AppCompatActivity {
             this.realm.insertOrUpdate(transaction);
 
             this.realm.commitTransaction();
+
+            Toast.makeText(getApplicationContext(), "Transaction added!",
+                    Toast.LENGTH_LONG).show();
         } catch (RealmPrimaryKeyConstraintException e) {
             this.realm.cancelTransaction();
-        }
 
-        Toast.makeText(getApplicationContext(), "Transaction added!",
-                Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Transaction failed!",
+                    Toast.LENGTH_LONG).show();
+        }
 
         updateTransactions();
     }
